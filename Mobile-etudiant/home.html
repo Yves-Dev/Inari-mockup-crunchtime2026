@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>INARI – Accueil</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@500&display=swap" rel="stylesheet"/>
+<style>
+
+:root {
+  --bg:        #F7FBF9;
+  --surface1:  #FFFFFF;
+  --surface2:  #F0F7F3;
+  --surface3:  #E8F3ED;
+  --border:    #E6F1EC;
+  --border2:   rgba(22,163,74,.12);
+  --text:      #0F172A;
+  --muted:     #5B6B65;
+  --muted2:    #9BB5A6;
+  --primary:   #16A34A;
+  --primary-dim:rgba(22,163,74,.08);
+  --secondary: #0EA5A4;
+  --accent:    #2FE680;
+  --alert:     #F59E0B;
+  --danger:    #DC2626;
+  --font:      'DM Sans', sans-serif;
+  --mono:      'DM Mono', monospace;
+  --r:         16px;
+  --r-sm:      10px;
+  --r-lg:      24px;
+  --shadow-sm: 0 1px 4px rgba(15,23,42,.06),0 1px 2px rgba(15,23,42,.04);
+  --shadow-md: 0 4px 16px rgba(15,23,42,.08),0 2px 6px rgba(15,23,42,.04);
+  --shadow-lg: 0 12px 40px rgba(15,23,42,.10);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;height:100%;background:#E8EDE9;}
+body{font-family:var(--font);display:flex;justify-content:center;align-items:center;min-height:100vh;padding:24px;}
+
+/* ── PHONE SHELL ── */
+.phone{
+  width:390px;height:844px;
+  background:var(--bg);
+  border-radius:52px;
+  border:1.5px solid rgba(22,163,74,.18);
+  box-shadow:
+    0 0 0 6px rgba(22,163,74,.05),
+    0 0 60px rgba(22,163,74,.10),
+    0 32px 80px rgba(15,23,42,.18),
+    inset 0 0 40px rgba(255,255,255,.8);
+  overflow:hidden;
+  position:relative;
+  display:flex;flex-direction:column;
+}
+.notch{
+  position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:120px;height:34px;
+  background:var(--text);
+  border-radius:0 0 22px 22px;
+  z-index:20;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.notch-cam{width:10px;height:10px;border-radius:50%;background:#1a2232;}
+.notch-light{width:4px;height:4px;border-radius:50%;background:#2FE680;opacity:.8;animation:blink 3s infinite;}
+@keyframes blink{0%,90%,100%{opacity:.8}92%,98%{opacity:.2}}
+.status{
+  height:44px;padding:0 28px;
+  display:flex;align-items:flex-end;justify-content:space-between;
+  padding-bottom:8px;
+  font-size:12px;font-weight:700;color:var(--text);
+  position:relative;z-index:10;flex-shrink:0;
+}
+.status-icons{display:flex;align-items:center;gap:5px;}
+.scroll{
+  flex:1;overflow-y:auto;overflow-x:hidden;
+  scroll-behavior:smooth;-webkit-overflow-scrolling:touch;
+}
+.scroll::-webkit-scrollbar{display:none;}
+
+/* ── BOTTOM NAV (4 items — no scanner) ── */
+.nav{
+  height:76px;
+  background:var(--surface1);
+  border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-around;
+  padding:0 16px 10px;
+  flex-shrink:0;
+  box-shadow:0 -4px 20px rgba(15,23,42,.06);
+}
+.nav-item{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  flex:1;padding:8px 0;cursor:pointer;
+  text-decoration:none;
+}
+.nav-icon{width:24px;height:24px;display:flex;align-items:center;justify-content:center;}
+.nav-label{font-size:10px;font-weight:600;color:var(--muted2);}
+.nav-item.active .nav-label{color:var(--primary);}
+.home-indicator{
+  height:4px;width:120px;background:rgba(15,23,42,.1);
+  border-radius:2px;margin:0 auto;
+  position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+}
+
+/* ── SHARED COMPONENTS ── */
+.sec-head{padding:0 24px 12px;display:flex;align-items:center;justify-content:space-between;}
+.sec-title{font-size:16px;font-weight:700;color:var(--text);}
+.sec-link{font-size:13px;font-weight:600;color:var(--primary);}
+
+/* ── ANIMATIONS ── */
+.fade-in{animation:fadeIn .4s ease both;}
+.fade-in-up{animation:fadeInUp .5s ease both;}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.d1{animation-delay:.05s}.d2{animation-delay:.1s}.d3{animation-delay:.15s}
+.d4{animation-delay:.2s}.d5{animation-delay:.25s}.d6{animation-delay:.3s}
+
+
+/* Header */
+.header{
+  padding:16px 24px 20px;
+  background:linear-gradient(180deg,rgba(22,163,74,.05) 0%,transparent 100%);
+  position:relative;
+}
+.header::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(22,163,74,.3),transparent);
+}
+.header-row{display:flex;align-items:center;justify-content:space-between;}
+.greeting{font-size:13px;color:var(--muted);font-weight:500;margin-bottom:3px;letter-spacing:.02em;}
+.name{font-size:24px;font-weight:800;color:var(--text);letter-spacing:-.5px;}
+.avatar-btn{
+  width:44px;height:44px;border-radius:14px;
+  background:linear-gradient(135deg,var(--primary),#0d7a36);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;font-weight:800;color:#fff;
+  box-shadow:0 4px 16px rgba(22,163,74,.3);
+  cursor:pointer;position:relative;
+}
+.avatar-badge{
+  position:absolute;top:-3px;right:-3px;
+  width:14px;height:14px;border-radius:50%;
+  background:var(--alert);border:2px solid var(--bg);
+}
+
+/* INARI Logo section */
+.logo-section{
+  margin:0 24px 22px;
+  background:var(--surface1);
+  border:1px solid var(--border);
+  border-radius:var(--r-lg);
+  padding:18px 20px;
+  display:flex;align-items:center;gap:16px;
+  box-shadow:var(--shadow-sm);
+  position:relative;overflow:hidden;
+}
+.logo-section::before{
+  content:'';
+  position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--primary),var(--accent),var(--secondary));
+}
+.logo-icon-wrap{
+  width:52px;height:52px;border-radius:16px;
+  background:linear-gradient(135deg,#ECFDF5,#D1FAE5);
+  border:1px solid rgba(22,163,74,.15);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.logo-text-wrap .logo-name{
+  font-size:22px;font-weight:800;color:var(--primary);
+  letter-spacing:-.5px;line-height:1;margin-bottom:3px;
+}
+.logo-text-wrap .logo-tagline{
+  font-size:11px;color:var(--muted);font-weight:500;
+  line-height:1.4;
+}
+.logo-badge{
+  margin-left:auto;
+  background:linear-gradient(135deg,var(--primary-dim),rgba(22,163,74,.15));
+  border:1px solid rgba(22,163,74,.2);
+  border-radius:10px;padding:5px 9px;
+  font-size:10px;font-weight:700;color:var(--primary);
+  text-align:center;flex-shrink:0;
+}
+
+/* Points card */
+.points-card{
+  margin:0 24px 20px;
+  background:linear-gradient(135deg,var(--primary) 0%,#0d8a3f 55%,#0e7a8a 100%);
+  border-radius:var(--r-lg);
+  padding:22px 22px 20px;
+  position:relative;overflow:hidden;
+  box-shadow:0 8px 32px rgba(22,163,74,.28),0 4px 12px rgba(22,163,74,.15);
+}
+.points-card::before{
+  content:'';position:absolute;top:-80px;right:-50px;
+  width:200px;height:200px;
+  background:radial-gradient(circle,rgba(255,255,255,.12) 0%,transparent 65%);
+}
+.points-card::after{
+  content:'';position:absolute;bottom:-60px;left:-30px;
+  width:160px;height:160px;
+  background:radial-gradient(circle,rgba(47,230,128,.2) 0%,transparent 70%);
+}
+.pts-row{display:flex;align-items:flex-start;justify-content:space-between;position:relative;z-index:1;}
+.pts-label{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:6px;}
+.pts-val{font-size:44px;font-weight:800;letter-spacing:-2px;color:#fff;line-height:1;}
+.pts-unit{font-size:16px;font-weight:600;color:rgba(255,255,255,.65);margin-top:2px;font-family:var(--mono);}
+.pts-right{text-align:right;}
+.pts-level{
+  background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);
+  border-radius:8px;padding:4px 10px;
+  font-size:11px;font-weight:700;color:#fff;letter-spacing:.05em;
+  margin-bottom:8px;display:inline-block;backdrop-filter:blur(8px);
+}
+.pts-rank{font-size:12px;color:rgba(255,255,255,.65);}
+.pts-rank strong{color:#fff;}
+.pts-bar-wrap{margin-top:16px;position:relative;z-index:1;}
+.pts-bar-label{display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.65);margin-bottom:7px;}
+.pts-bar-bg{height:6px;background:rgba(255,255,255,.15);border-radius:100px;overflow:hidden;}
+.pts-bar-fill{height:100%;width:68%;background:rgba(255,255,255,.9);border-radius:100px;animation:barFill .9s ease forwards;}
+@keyframes barFill{from{width:0}}
+
+/* Event cards */
+.events-scroll{display:flex;gap:14px;padding:0 24px 4px;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.events-scroll::-webkit-scrollbar{display:none;}
+.event-card{
+  flex-shrink:0;width:220px;
+  background:var(--surface1);border:1px solid var(--border);
+  border-radius:var(--r-lg);overflow:hidden;
+  box-shadow:var(--shadow-md);
+}
+.event-card:active{transform:scale(.97);}
+.event-img{
+  height:88px;position:relative;
+  display:flex;align-items:center;justify-content:center;
+  font-size:30px;
+}
+.event-img.green{background:linear-gradient(135deg,#ECFDF5,#D1FAE5);}
+.event-img.teal{background:linear-gradient(135deg,#F0FFFE,#CCFBF1);}
+.event-img.amber{background:linear-gradient(135deg,#FFFBEB,#FEF3C7);}
+.event-pts-badge{
+  position:absolute;top:10px;right:10px;
+  background:rgba(22,163,74,.1);border:1px solid rgba(22,163,74,.2);
+  border-radius:8px;padding:3px 8px;
+  font-size:11px;font-weight:700;color:var(--primary);
+}
+.event-body{padding:13px 14px 15px;}
+.event-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:6px;line-height:1.3;}
+.event-meta{display:flex;flex-direction:column;gap:4px;margin-bottom:12px;}
+.event-row{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);}
+.event-btn{
+  width:100%;background:var(--primary);border:none;
+  color:#fff;font-family:var(--font);font-size:12px;font-weight:700;
+  padding:8px;border-radius:10px;cursor:pointer;
+  box-shadow:0 2px 8px rgba(22,163,74,.25);
+}
+
+/* Mini map */
+.map-wrap{margin:4px 24px 0;position:relative;}
+.map-container{
+  height:170px;border-radius:var(--r-lg);overflow:hidden;
+  background:var(--surface1);border:1px solid var(--border);
+  position:relative;box-shadow:var(--shadow-sm);
+}
+.map-svg{width:100%;height:100%;}
+.map-overlay{
+  position:absolute;top:12px;left:12px;right:12px;
+  display:flex;justify-content:space-between;align-items:flex-start;
+}
+.map-label{
+  background:rgba(255,255,255,.92);backdrop-filter:blur(8px);
+  border:1px solid var(--border);border-radius:8px;
+  padding:5px 10px;font-size:11px;font-weight:700;color:var(--text);
+  box-shadow:var(--shadow-sm);
+}
+.map-expand{
+  background:rgba(255,255,255,.92);backdrop-filter:blur(8px);
+  border:1px solid var(--border);border-radius:8px;
+  width:30px;height:30px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;box-shadow:var(--shadow-sm);
+  text-decoration:none;
+}
+
+/* Streak */
+.streak{
+  margin:14px 24px 0;
+  background:linear-gradient(135deg,rgba(245,158,11,.08),rgba(245,158,11,.04));
+  border:1px solid rgba(245,158,11,.25);
+  border-radius:var(--r);padding:14px 16px;
+  display:flex;align-items:center;gap:14px;
+  box-shadow:var(--shadow-sm);
+}
+.streak-flame{font-size:28px;animation:flicker .8s ease-in-out infinite alternate;}
+@keyframes flicker{from{transform:scale(1) rotate(-3deg)}to{transform:scale(1.1) rotate(3deg)}}
+.streak-title{font-size:14px;font-weight:700;color:#b45309;margin-bottom:2px;}
+.streak-sub{font-size:12px;color:var(--muted);}
+.streak-days{margin-left:auto;display:flex;gap:4px;}
+.streak-dot{width:8px;height:8px;border-radius:50%;}
+.streak-dot.on{background:var(--alert);box-shadow:0 0 6px rgba(245,158,11,.4);}
+.streak-dot.off{background:var(--border);}
+
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <div class="notch"><div class="notch-cam"></div><div class="notch-light"></div></div>
+  <div class="status">
+    <span>9:41</span>
+    <div class="status-icons">
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><rect x="0" y="3" width="3" height="9" rx="1" fill="#0F172A" opacity=".3"/><rect x="4.5" y="2" width="3" height="10" rx="1" fill="#0F172A" opacity=".5"/><rect x="9" y="0" width="3" height="12" rx="1" fill="#0F172A" opacity=".8"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" fill="#0F172A"/></svg>
+      <svg width="15" height="12" viewBox="0 0 15 12" fill="#0F172A"><path d="M7.5 2.5C9.8 2.5 11.8 3.5 13.2 5L14.5 3.5C12.7 1.8 10.2.8 7.5.8S2.3 1.8.5 3.5L1.8 5C3.2 3.5 5.2 2.5 7.5 2.5Z" opacity=".3"/><path d="M7.5 5C9 5 10.3 5.6 11.3 6.6L12.6 5.1C11.2 3.8 9.4 3 7.5 3S3.8 3.8 2.4 5.1L3.7 6.6C4.7 5.6 6 5 7.5 5Z" opacity=".6"/><path d="M7.5 7.5C8.3 7.5 9 7.8 9.6 8.3L10.9 6.8C9.9 6 8.8 5.5 7.5 5.5S5.1 6 4.1 6.8L5.4 8.3C6 7.8 6.7 7.5 7.5 7.5Z"/><circle cx="7.5" cy="11" r="1.5"/></svg>
+      <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="#0F172A" stroke-opacity=".2"/><rect x="22.5" y="3.5" width="2" height="5" rx="1" fill="#0F172A" opacity=".35"/><rect x="2" y="2" width="15" height="8" rx="2" fill="#16A34A"/></svg>
+    </div>
+  </div>
+
+  <div class="scroll">
+
+    <!-- Header -->
+    <div class="header fade-in">
+      <div class="header-row">
+        <div>
+          <div class="greeting">Bonjour 👋</div>
+          <div class="name">Camille</div>
+        </div>
+        <div class="avatar-btn">C<div class="avatar-badge"></div></div>
+      </div>
+    </div>
+
+    <!-- Logo section -->
+    <div class="logo-section fade-in-up d1">
+      <div class="logo-icon-wrap">
+        <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+          <path d="M15 3C10.6 3 8 6.5 8 11c0 3.6 2.2 6.6 5.6 7.8.3-3 1.6-6 5.2-8-2.3 3.2-2.7 6.5-2.5 8-.3 0-.5 0-.8 0 4.6 0 7-3.5 7-8C22.5 6.3 19.2 3 15 3Z" fill="#16A34A"/>
+          <path d="M10.5 24L12 26l1.5-2M19.5 24L18 26l-1.5-2M12 26h6" stroke="#0EA5A4" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="logo-text-wrap">
+        <div class="logo-name">INARI</div>
+        <div class="logo-tagline">Initiative pour la Nature,<br>l'Action &amp; le Recyclage Inclusif</div>
+      </div>
+      <div class="logo-badge">🌿<br>Campus<br>Vert</div>
+    </div>
+
+    <!-- Points card -->
+    <div class="points-card fade-in-up d2">
+      <div class="pts-row">
+        <div>
+          <div class="pts-label">Mes points INARI</div>
+          <div class="pts-val">2 480</div>
+          <div class="pts-unit">pts</div>
+        </div>
+        <div class="pts-right">
+          <div class="pts-level">🌿 Éco-Actif</div>
+          <div class="pts-rank">Rang <strong>#47</strong> campus</div>
+        </div>
+      </div>
+      <div class="pts-bar-wrap">
+        <div class="pts-bar-label">
+          <span>Prochain niveau : Éco-Expert</span>
+          <span>2480 / 3000</span>
+        </div>
+        <div class="pts-bar-bg"><div class="pts-bar-fill"></div></div>
+      </div>
+    </div>
+
+    <!-- Events -->
+    <div class="sec-head fade-in-up d3">
+      <div class="sec-title">Événements proches</div>
+      <a class="sec-link" href="carte.html">Voir tout →</a>
+    </div>
+    <div class="events-scroll fade-in-up d3">
+      <div class="event-card">
+        <div class="event-img green">♻️<div class="event-pts-badge">+120 pts</div></div>
+        <div class="event-body">
+          <div class="event-title">Collecte Plastique — BU</div>
+          <div class="event-meta">
+            <div class="event-row"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Demain, 10h00 – 13h00</div>
+            <div class="event-row"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>350 m · Bibliothèque Univ.</div>
+          </div>
+          <button class="event-btn">Participer</button>
+        </div>
+      </div>
+      <div class="event-card">
+        <div class="event-img teal">🌊<div class="event-pts-badge" style="color:var(--secondary);background:rgba(14,165,164,.08);border-color:rgba(14,165,164,.2)">+200 pts</div></div>
+        <div class="event-body">
+          <div class="event-title">Grand Tri Électronique</div>
+          <div class="event-meta">
+            <div class="event-row"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Sam 15 juin, 9h – 17h</div>
+            <div class="event-row"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>1,2 km · Cafétéria centrale</div>
+          </div>
+          <button class="event-btn" style="background:var(--secondary);box-shadow:0 2px 8px rgba(14,165,164,.25)">Participer</button>
+        </div>
+      </div>
+      <div class="event-card">
+        <div class="event-img amber">🍂<div class="event-pts-badge" style="color:#b45309;background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.2)">+80 pts</div></div>
+        <div class="event-body">
+          <div class="event-title">Compostage Collectif</div>
+          <div class="event-meta">
+            <div class="event-row"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Jeu 13 juin, 14h – 16h</div>
+            <div class="event-row"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>600 m · Jardin du campus</div>
+          </div>
+          <button class="event-btn" style="background:var(--alert);box-shadow:0 2px 8px rgba(245,158,11,.25)">Participer</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mini map -->
+    <div class="sec-head fade-in-up d4" style="margin-top:18px">
+      <div class="sec-title">Carte du campus</div>
+      <a class="sec-link" href="carte.html">Explorer →</a>
+    </div>
+    <div class="map-wrap fade-in-up d4">
+      <div class="map-container">
+        <svg class="map-svg" viewBox="0 0 342 170" fill="none">
+          <rect width="342" height="170" fill="#EFF7F2"/>
+          <line x1="0" y1="42" x2="342" y2="42" stroke="#DCF0E4"/><line x1="0" y1="84" x2="342" y2="84" stroke="#DCF0E4"/><line x1="0" y1="126" x2="342" y2="126" stroke="#DCF0E4"/>
+          <line x1="57" y1="0" x2="57" y2="170" stroke="#DCF0E4"/><line x1="114" y1="0" x2="114" y2="170" stroke="#DCF0E4"/><line x1="171" y1="0" x2="171" y2="170" stroke="#DCF0E4"/><line x1="228" y1="0" x2="228" y2="170" stroke="#DCF0E4"/><line x1="285" y1="0" x2="285" y2="170" stroke="#DCF0E4"/>
+          <rect x="40" y="0" width="20" height="170" fill="#E0EDE5"/>
+          <rect x="0" y="70" width="342" height="18" fill="#E0EDE5"/>
+          <rect x="160" y="0" width="16" height="170" fill="#E0EDE5"/>
+          <rect x="0" y="130" width="342" height="14" fill="#E0EDE5"/>
+          <rect x="65" y="10" width="80" height="50" rx="4" fill="#C8E6D4" stroke="#B5D9C4"/>
+          <rect x="185" y="10" width="60" height="50" rx="4" fill="#CBE8D6" stroke="#B8DBCA"/>
+          <rect x="260" y="10" width="65" height="50" rx="4" fill="#D0EAD8" stroke="#BDDDC9"/>
+          <rect x="65" y="95" width="55" height="25" rx="3" fill="#CBE8D6" stroke="#B8DBCA"/>
+          <rect x="130" y="95" width="20" height="25" rx="3" fill="#C8E6D4" stroke="#B5D9C4"/>
+          <rect x="185" y="95" width="35" height="25" rx="3" fill="#CBE8D6" stroke="#B8DBCA"/>
+          <rect x="230" y="95" width="100" height="25" rx="3" fill="#C8E6D4" stroke="#B5D9C4"/>
+          <ellipse cx="105" cy="152" rx="30" ry="12" fill="#A8D8B6"/>
+          <ellipse cx="300" cy="152" rx="25" ry="12" fill="#A8D8B6"/>
+          <g transform="translate(215,35)"><circle r="9" fill="#16A34A" opacity=".15"/><circle r="6" fill="#16A34A"/><text x="0" y="4" text-anchor="middle" fill="white" font-size="8" font-weight="800">♻</text></g>
+          <g transform="translate(280,35)"><circle r="9" fill="#16A34A" opacity=".15"/><circle r="6" fill="#16A34A"/><text x="0" y="4" text-anchor="middle" fill="white" font-size="8" font-weight="800">♻</text></g>
+          <g transform="translate(95,107)"><circle r="7" fill="#16A34A" opacity=".15"/><circle r="5" fill="#16A34A"/><text x="0" y="3.5" text-anchor="middle" fill="white" font-size="7" font-weight="800">♻</text></g>
+          <circle cx="105" cy="38" r="10" fill="#0EA5A4" opacity=".2"/><circle cx="105" cy="38" r="6" fill="#0EA5A4"/><circle cx="105" cy="38" r="3" fill="white"/>
+          <circle cx="105" cy="38" r="14" fill="none" stroke="#0EA5A4" stroke-width="1.5" opacity=".35"><animate attributeName="r" values="10;18;10" dur="2s" repeatCount="indefinite"/><animate attributeName="opacity" values=".5;0;.5" dur="2s" repeatCount="indefinite"/></circle>
+        </svg>
+        <div class="map-overlay">
+          <div class="map-label">📍 Campus Sciences</div>
+          <a class="map-expand" href="carte.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0F172A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Streak -->
+    <div class="streak fade-in-up d5">
+      <div class="streak-flame">🔥</div>
+      <div>
+        <div class="streak-title">Streak de participation : 5 jours</div>
+        <div class="streak-sub">Continuez demain pour débloquer +50 pts bonus !</div>
+      </div>
+      <div class="streak-days">
+        <div class="streak-dot on"></div><div class="streak-dot on"></div><div class="streak-dot on"></div><div class="streak-dot on"></div><div class="streak-dot on"></div><div class="streak-dot off"></div><div class="streak-dot off"></div>
+      </div>
+    </div>
+
+    <div style="height:20px"></div>
+  </div>
+<div class="nav fade-in d5"><a class="nav-item active" href="home.html"><div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="nav-label">Accueil</div></a><a class="nav-item" href="carte.html"><div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--muted2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div class="nav-label">Carte</div></a><a class="nav-item" href="recompenses.html"><div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--muted2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg></div><div class="nav-label">Récompenses</div></a><a class="nav-item" href="profil.html"><div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--muted2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="nav-label">Profil</div></a></div><div class="home-indicator"></div>
+</div>
+
+</body>
+</html>

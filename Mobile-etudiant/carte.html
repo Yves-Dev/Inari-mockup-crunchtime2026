@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>INARI – Carte campus</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@500&display=swap" rel="stylesheet"/>
+<style>
+
+:root {
+  --bg:        #F7FBF9;
+  --surface1:  #FFFFFF;
+  --surface2:  #F0F7F3;
+  --surface3:  #E8F3ED;
+  --border:    #E6F1EC;
+  --border2:   rgba(22,163,74,.12);
+  --text:      #0F172A;
+  --muted:     #5B6B65;
+  --muted2:    #9BB5A6;
+  --primary:   #16A34A;
+  --primary-dim:rgba(22,163,74,.08);
+  --secondary: #0EA5A4;
+  --accent:    #2FE680;
+  --alert:     #F59E0B;
+  --danger:    #DC2626;
+  --font:      'DM Sans', sans-serif;
+  --mono:      'DM Mono', monospace;
+  --r:         16px;
+  --r-sm:      10px;
+  --r-lg:      24px;
+  --shadow-sm: 0 1px 4px rgba(15,23,42,.06),0 1px 2px rgba(15,23,42,.04);
+  --shadow-md: 0 4px 16px rgba(15,23,42,.08),0 2px 6px rgba(15,23,42,.04);
+  --shadow-lg: 0 12px 40px rgba(15,23,42,.10);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;height:100%;background:#E8EDE9;}
+body{font-family:var(--font);display:flex;justify-content:center;align-items:center;min-height:100vh;padding:24px;}
+
+/* ── PHONE SHELL ── */
+.phone{
+  width:390px;height:844px;
+  background:var(--bg);
+  border-radius:52px;
+  border:1.5px solid rgba(22,163,74,.18);
+  box-shadow:
+    0 0 0 6px rgba(22,163,74,.05),
+    0 0 60px rgba(22,163,74,.10),
+    0 32px 80px rgba(15,23,42,.18),
+    inset 0 0 40px rgba(255,255,255,.8);
+  overflow:hidden;
+  position:relative;
+  display:flex;flex-direction:column;
+}
+.notch{
+  position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:120px;height:34px;
+  background:var(--text);
+  border-radius:0 0 22px 22px;
+  z-index:20;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.notch-cam{width:10px;height:10px;border-radius:50%;background:#1a2232;}
+.notch-light{width:4px;height:4px;border-radius:50%;background:#2FE680;opacity:.8;animation:blink 3s infinite;}
+@keyframes blink{0%,90%,100%{opacity:.8}92%,98%{opacity:.2}}
+.status{
+  height:44px;padding:0 28px;
+  display:flex;align-items:flex-end;justify-content:space-between;
+  padding-bottom:8px;
+  font-size:12px;font-weight:700;color:var(--text);
+  position:relative;z-index:10;flex-shrink:0;
+}
+.status-icons{display:flex;align-items:center;gap:5px;}
+.scroll{
+  flex:1;overflow-y:auto;overflow-x:hidden;
+  scroll-behavior:smooth;-webkit-overflow-scrolling:touch;
+}
+.scroll::-webkit-scrollbar{display:none;}
+
+/* ── BOTTOM NAV (4 items — no scanner) ── */
+.nav{
+  height:76px;
+  background:var(--surface1);
+  border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-around;
+  padding:0 16px 10px;
+  flex-shrink:0;
+  box-shadow:0 -4px 20px rgba(15,23,42,.06);
+}
+.nav-item{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  flex:1;padding:8px 0;cursor:pointer;
+  text-decoration:none;
+}
+.nav-icon{width:24px;height:24px;display:flex;align-items:center;justify-content:center;}
+.nav-label{font-size:10px;font-weight:600;color:var(--muted2);}
+.nav-item.active .nav-label{color:var(--primary);}
+.home-indicator{
+  height:4px;width:120px;background:rgba(15,23,42,.1);
+  border-radius:2px;margin:0 auto;
+  position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+}
+
+/* ── SHARED COMPONENTS ── */
+.sec-head{padding:0 24px 12px;display:flex;align-items:center;justify-content:space-between;}
+.sec-title{font-size:16px;font-weight:700;color:var(--text);}
+.sec-link{font-size:13px;font-weight:600;color:var(--primary);}
+
+/* ── ANIMATIONS ── */
+.fade-in{animation:fadeIn .4s ease both;}
+.fade-in-up{animation:fadeInUp .5s ease both;}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.d1{animation-delay:.05s}.d2{animation-delay:.1s}.d3{animation-delay:.15s}
+.d4{animation-delay:.2s}.d5{animation-delay:.25s}.d6{animation-delay:.3s}
+
+
+.page-header{
+  padding:16px 24px 14px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.page-title{font-size:22px;font-weight:800;color:var(--text);letter-spacing:-.4px;}
+.page-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+.filter-strip{
+  display:flex;gap:8px;padding:0 24px 14px;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;
+}
+.filter-strip::-webkit-scrollbar{display:none;}
+.chip{
+  flex-shrink:0;height:30px;padding:0 13px;
+  background:var(--surface1);border:1px solid var(--border);
+  border-radius:100px;font-size:12px;font-weight:600;color:var(--muted);
+  display:flex;align-items:center;gap:5px;cursor:pointer;
+  transition:all .15s;
+}
+.chip.on{background:var(--primary-dim);border-color:rgba(22,163,74,.25);color:var(--primary);}
+.map-full{
+  margin:0 24px;
+  height:280px;border-radius:var(--r-lg);overflow:hidden;
+  background:var(--surface1);border:1px solid var(--border);
+  position:relative;box-shadow:var(--shadow-md);
+}
+.map-full svg{width:100%;height:100%;}
+.map-badge{
+  position:absolute;top:12px;left:12px;
+  background:rgba(255,255,255,.92);backdrop-filter:blur(8px);
+  border:1px solid var(--border);border-radius:8px;
+  padding:5px 10px;font-size:11px;font-weight:700;
+  box-shadow:var(--shadow-sm);
+}
+.point-list{padding:16px 24px 0;display:flex;flex-direction:column;gap:10px;}
+.point-card{
+  background:var(--surface1);border:1px solid var(--border);
+  border-radius:var(--r);padding:14px 16px;
+  display:flex;align-items:center;gap:12px;
+  box-shadow:var(--shadow-sm);cursor:pointer;
+  transition:box-shadow .15s;
+}
+.point-card:active{box-shadow:var(--shadow-md);}
+.point-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.point-info{flex:1;min-width:0;}
+.point-name{font-size:13px;font-weight:700;color:var(--text);}
+.point-meta{font-size:11px;color:var(--muted);margin-top:2px;}
+.point-bar-bg{height:3px;background:var(--surface3);border-radius:2px;overflow:hidden;margin-top:6px;}
+.point-bar-fill{height:100%;border-radius:2px;}
+.point-pct{font-size:12px;font-weight:700;flex-shrink:0;}
+.point-arrow{color:var(--muted2);}
+
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <div class="notch"><div class="notch-cam"></div><div class="notch-light"></div></div>
+  <div class="status">
+    <span>9:41</span>
+    <div class="status-icons">
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><rect x="0" y="3" width="3" height="9" rx="1" fill="#0F172A" opacity=".3"/><rect x="4.5" y="2" width="3" height="10" rx="1" fill="#0F172A" opacity=".5"/><rect x="9" y="0" width="3" height="12" rx="1" fill="#0F172A" opacity=".8"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" fill="#0F172A"/></svg>
+      <svg width="15" height="12" viewBox="0 0 15 12" fill="#0F172A"><path d="M7.5 2.5C9.8 2.5 11.8 3.5 13.2 5L14.5 3.5C12.7 1.8 10.2.8 7.5.8S2.3 1.8.5 3.5L1.8 5C3.2 3.5 5.2 2.5 7.5 2.5Z" opacity=".3"/><path d="M7.5 5C9 5 10.3 5.6 11.3 6.6L12.6 5.1C11.2 3.8 9.4 3 7.5 3S3.8 3.8 2.4 5.1L3.7 6.6C4.7 5.6 6 5 7.5 5Z" opacity=".6"/><path d="M7.5 7.5C8.3 7.5 9 7.8 9.6 8.3L10.9 6.8C9.9 6 8.8 5.5 7.5 5.5S5.1 6 4.1 6.8L5.4 8.3C6 7.8 6.7 7.5 7.5 7.5Z"/><circle cx="7.5" cy="11" r="1.5"/></svg>
+      <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="#0F172A" stroke-opacity=".2"/><rect x="22.5" y="3.5" width="2" height="5" rx="1" fill="#0F172A" opacity=".35"/><rect x="2" y="2" width="15" height="8" rx="2" fill="#16A34A"/></svg>
+    </div>
+  </div>
+
+  <div class="scroll">
+
+    <div class="page-header fade-in">
+      <div>
+        <div class="page-title">Carte campus</div>
+        <div class="page-sub">5 points de collecte actifs</div>
+      </div>
+      <div style="width:40px;height:40px;border-radius:12px;background:var(--surface1);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--shadow-sm)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </div>
+    </div>
+
+    <div class="filter-strip fade-in-up d1">
+      <div class="chip on">Tous</div>
+      <div class="chip">En cours</div>
+      <div class="chip">Plastique</div>
+      <div class="chip">Verre</div>
+      <div class="chip">Papier</div>
+      <div class="chip">Organique</div>
+    </div>
+
+    <div class="map-full fade-in-up d2">
+      <svg viewBox="0 0 342 280" fill="none">
+        <rect width="342" height="280" fill="#EFF7F2"/>
+        <line x1="0" y1="70" x2="342" y2="70" stroke="#DCF0E4"/><line x1="0" y1="140" x2="342" y2="140" stroke="#DCF0E4"/><line x1="0" y1="210" x2="342" y2="210" stroke="#DCF0E4"/>
+        <line x1="57" y1="0" x2="57" y2="280" stroke="#DCF0E4"/><line x1="114" y1="0" x2="114" y2="280" stroke="#DCF0E4"/><line x1="171" y1="0" x2="171" y2="280" stroke="#DCF0E4"/><line x1="228" y1="0" x2="228" y2="280" stroke="#DCF0E4"/><line x1="285" y1="0" x2="285" y2="280" stroke="#DCF0E4"/>
+        <rect x="40" y="0" width="20" height="280" fill="#E0EDE5"/>
+        <rect x="0" y="110" width="342" height="20" fill="#E0EDE5"/>
+        <rect x="160" y="0" width="16" height="280" fill="#E0EDE5"/>
+        <rect x="0" y="208" width="342" height="18" fill="#E0EDE5"/>
+        <rect x="65" y="15" width="80" height="80" rx="6" fill="#C8E6D4" stroke="#B5D9C4"/>
+        <text x="105" y="59" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" font-weight="700" fill="#2d5a3e">Amphi A</text>
+        <rect x="185" y="15" width="60" height="80" rx="6" fill="#CBE8D6" stroke="#B8DBCA"/>
+        <text x="215" y="59" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" font-weight="700" fill="#2d5a3e">Cafétéria</text>
+        <rect x="260" y="15" width="65" height="80" rx="6" fill="#D0EAD8" stroke="#BDDDC9"/>
+        <text x="292" y="59" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" font-weight="700" fill="#2d5a3e">BU Nord</text>
+        <rect x="65" y="140" width="55" height="60" rx="5" fill="#CBE8D6" stroke="#B8DBCA"/>
+        <text x="92" y="175" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="8" font-weight="700" fill="#2d5a3e">Rés. A</text>
+        <rect x="185" y="140" width="145" height="60" rx="5" fill="#C8E6D4" stroke="#B5D9C4"/>
+        <text x="257" y="175" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="8" font-weight="700" fill="#2d5a3e">Labo Info</text>
+        <ellipse cx="105" cy="248" rx="30" ry="16" fill="#A8D8B6"/>
+        <text x="105" y="252" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="8" font-weight="600" fill="#1a5c2e">Jardin</text>
+        <ellipse cx="300" cy="248" rx="25" ry="14" fill="#A8D8B6"/>
+        <!-- Heat blobs -->
+        <ellipse cx="105" cy="55" rx="55" ry="48" fill="url(#ch1)" opacity=".5"/>
+        <ellipse cx="215" cy="55" rx="45" ry="38" fill="url(#ch2)" opacity=".4"/>
+        <defs>
+          <radialGradient id="ch1"><stop offset="0%" stop-color="#EF4444" stop-opacity=".8"/><stop offset="100%" stop-color="#EF4444" stop-opacity="0"/></radialGradient>
+          <radialGradient id="ch2"><stop offset="0%" stop-color="#F59E0B" stop-opacity=".8"/><stop offset="100%" stop-color="#F59E0B" stop-opacity="0"/></radialGradient>
+        </defs>
+        <!-- Markers -->
+        <g transform="translate(105,55)"><circle r="14" fill="#EF4444" opacity=".15"/><circle r="9" fill="#EF4444"/><text x="0" y="3.5" text-anchor="middle" fill="white" font-size="10" font-weight="800">♻</text><circle r="18" fill="none" stroke="#EF4444" stroke-width="1.5" opacity=".3"><animate attributeName="r" values="12;22;12" dur="2s" repeatCount="indefinite"/><animate attributeName="opacity" values=".4;0;.4" dur="2s" repeatCount="indefinite"/></circle></g>
+        <g transform="translate(215,55)"><circle r="12" fill="#F59E0B" opacity=".15"/><circle r="8" fill="#F59E0B"/><text x="0" y="3" text-anchor="middle" fill="white" font-size="9" font-weight="800">♻</text></g>
+        <g transform="translate(292,55)"><circle r="11" fill="#16A34A" opacity=".15"/><circle r="7" fill="#16A34A"/><text x="0" y="2.5" text-anchor="middle" fill="white" font-size="8" font-weight="800">♻</text></g>
+        <g transform="translate(92,170)"><circle r="10" fill="#16A34A" opacity=".15"/><circle r="6.5" fill="#16A34A"/><text x="0" y="2.5" text-anchor="middle" fill="white" font-size="7.5" font-weight="800">♻</text></g>
+        <g transform="translate(257,170)"><circle r="10" fill="#0EA5A4" opacity=".15"/><circle r="6.5" fill="#0EA5A4"/><text x="0" y="2.5" text-anchor="middle" fill="white" font-size="7.5" font-weight="800">♻</text></g>
+        <!-- User -->
+        <g transform="translate(165,100)"><circle r="10" fill="#7c3aed" opacity=".15"/><circle r="6" fill="#7c3aed"/><circle r="2.5" fill="white"/></g>
+      </svg>
+      <div class="map-badge">📍 Campus Sciences · 5 points actifs</div>
+    </div>
+
+    <div class="point-list fade-in-up d3">
+      <div class="point-card">
+        <div class="point-dot" style="background:#EF4444"></div>
+        <div class="point-info">
+          <div class="point-name">Amphi A · Bât. Sciences</div>
+          <div class="point-meta">En cours · 34/50 participants</div>
+          <div class="point-bar-bg"><div class="point-bar-fill" style="width:68%;background:linear-gradient(90deg,#EF4444,#f87171)"></div></div>
+        </div>
+        <span class="point-pct" style="color:#EF4444">68%</span>
+        <svg class="point-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="point-card">
+        <div class="point-dot" style="background:#F59E0B"></div>
+        <div class="point-info">
+          <div class="point-name">Cafétéria centrale</div>
+          <div class="point-meta">En cours · 43/45 — Presque plein !</div>
+          <div class="point-bar-bg"><div class="point-bar-fill" style="width:95%;background:linear-gradient(90deg,#F59E0B,#fbbf24)"></div></div>
+        </div>
+        <span class="point-pct" style="color:#F59E0B">95%</span>
+        <svg class="point-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="point-card">
+        <div class="point-dot" style="background:#16A34A"></div>
+        <div class="point-info">
+          <div class="point-name">BU Nord</div>
+          <div class="point-meta">En cours · 28/40 participants</div>
+          <div class="point-bar-bg"><div class="point-bar-fill" style="width:70%;background:linear-gradient(90deg,var(--primary),var(--accent))"></div></div>
+        </div>
+        <span class="point-pct" style="color:var(--primary)">70%</span>
+        <svg class="point-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="point-card">
+        <div class="point-dot" style="background:#16A34A"></div>
+        <div class="point-info">
+          <div class="point-name">Résidence Ampère</div>
+          <div class="point-meta">Programmé · Dem. 08h–11h</div>
+          <div class="point-bar-bg"><div class="point-bar-fill" style="width:20%;background:var(--primary)"></div></div>
+        </div>
+        <span class="point-pct" style="color:var(--muted2)">8/40</span>
+        <svg class="point-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="point-card">
+        <div class="point-dot" style="background:#0EA5A4"></div>
+        <div class="point-info">
+          <div class="point-name">Labo Informatique C3</div>
+          <div class="point-meta">Programmé · Ven. 11h–13h</div>
+          <div class="point-bar-bg"><div class="point-bar-fill" style="width:0%;background:var(--secondary)"></div></div>
+        </div>
+        <span class="point-pct" style="color:var(--muted2)">0/30</span>
+        <svg class="point-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+    </div>
+
+    <div style="height:20px"></div>
+  </div>
+<div class="nav fade-in d5"><a class="nav-item" href="home.html"><div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--muted2)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="nav-label">Accueil</div></a><a class="nav-item active" href="carte.html"><div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div class="nav-label">Carte</div></a><a class="nav-item" href="recompenses.html"><div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--muted2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg></div><div class="nav-label">Récompenses</div></a><a class="nav-item" href="profil.html"><div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--muted2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="nav-label">Profil</div></a></div><div class="home-indicator"></div>
+</div>
+
+</body>
+</html>

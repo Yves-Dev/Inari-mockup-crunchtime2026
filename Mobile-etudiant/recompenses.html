@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>INARI – Récompenses</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@500&display=swap" rel="stylesheet"/>
+<style>
+
+:root {
+  --bg:        #F7FBF9;
+  --surface1:  #FFFFFF;
+  --surface2:  #F0F7F3;
+  --surface3:  #E8F3ED;
+  --border:    #E6F1EC;
+  --border2:   rgba(22,163,74,.12);
+  --text:      #0F172A;
+  --muted:     #5B6B65;
+  --muted2:    #9BB5A6;
+  --primary:   #16A34A;
+  --primary-dim:rgba(22,163,74,.08);
+  --secondary: #0EA5A4;
+  --accent:    #2FE680;
+  --alert:     #F59E0B;
+  --danger:    #DC2626;
+  --font:      'DM Sans', sans-serif;
+  --mono:      'DM Mono', monospace;
+  --r:         16px;
+  --r-sm:      10px;
+  --r-lg:      24px;
+  --shadow-sm: 0 1px 4px rgba(15,23,42,.06),0 1px 2px rgba(15,23,42,.04);
+  --shadow-md: 0 4px 16px rgba(15,23,42,.08),0 2px 6px rgba(15,23,42,.04);
+  --shadow-lg: 0 12px 40px rgba(15,23,42,.10);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;height:100%;background:#E8EDE9;}
+body{font-family:var(--font);display:flex;justify-content:center;align-items:center;min-height:100vh;padding:24px;}
+
+/* ── PHONE SHELL ── */
+.phone{
+  width:390px;height:844px;
+  background:var(--bg);
+  border-radius:52px;
+  border:1.5px solid rgba(22,163,74,.18);
+  box-shadow:
+    0 0 0 6px rgba(22,163,74,.05),
+    0 0 60px rgba(22,163,74,.10),
+    0 32px 80px rgba(15,23,42,.18),
+    inset 0 0 40px rgba(255,255,255,.8);
+  overflow:hidden;
+  position:relative;
+  display:flex;flex-direction:column;
+}
+.notch{
+  position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:120px;height:34px;
+  background:var(--text);
+  border-radius:0 0 22px 22px;
+  z-index:20;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.notch-cam{width:10px;height:10px;border-radius:50%;background:#1a2232;}
+.notch-light{width:4px;height:4px;border-radius:50%;background:#2FE680;opacity:.8;animation:blink 3s infinite;}
+@keyframes blink{0%,90%,100%{opacity:.8}92%,98%{opacity:.2}}
+.status{
+  height:44px;padding:0 28px;
+  display:flex;align-items:flex-end;justify-content:space-between;
+  padding-bottom:8px;
+  font-size:12px;font-weight:700;color:var(--text);
+  position:relative;z-index:10;flex-shrink:0;
+}
+.status-icons{display:flex;align-items:center;gap:5px;}
+.scroll{
+  flex:1;overflow-y:auto;overflow-x:hidden;
+  scroll-behavior:smooth;-webkit-overflow-scrolling:touch;
+}
+.scroll::-webkit-scrollbar{display:none;}
+
+/* ── BOTTOM NAV (4 items — no scanner) ── */
+.nav{
+  height:76px;
+  background:var(--surface1);
+  border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-around;
+  padding:0 16px 10px;
+  flex-shrink:0;
+  box-shadow:0 -4px 20px rgba(15,23,42,.06);
+}
+.nav-item{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  flex:1;padding:8px 0;cursor:pointer;
+  text-decoration:none;
+}
+.nav-icon{width:24px;height:24px;display:flex;align-items:center;justify-content:center;}
+.nav-label{font-size:10px;font-weight:600;color:var(--muted2);}
+.nav-item.active .nav-label{color:var(--primary);}
+.home-indicator{
+  height:4px;width:120px;background:rgba(15,23,42,.1);
+  border-radius:2px;margin:0 auto;
+  position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+}
+
+/* ── SHARED COMPONENTS ── */
+.sec-head{padding:0 24px 12px;display:flex;align-items:center;justify-content:space-between;}
+.sec-title{font-size:16px;font-weight:700;color:var(--text);}
+.sec-link{font-size:13px;font-weight:600;color:var(--primary);}
+
+/* ── ANIMATIONS ── */
+.fade-in{animation:fadeIn .4s ease both;}
+.fade-in-up{animation:fadeInUp .5s ease both;}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.d1{animation-delay:.05s}.d2{animation-delay:.1s}.d3{animation-delay:.15s}
+.d4{animation-delay:.2s}.d5{animation-delay:.25s}.d6{animation-delay:.3s}
+
+
+.page-header{padding:16px 24px 14px;display:flex;align-items:center;justify-content:space-between;}
+.page-title{font-size:22px;font-weight:800;color:var(--text);letter-spacing:-.4px;}
+.page-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+.pts-mini{
+  margin:0 24px 18px;
+  background:linear-gradient(135deg,var(--primary),#0d8a3f 60%,#0e7a8a);
+  border-radius:var(--r-lg);padding:16px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  box-shadow:0 6px 24px rgba(22,163,74,.25);
+}
+.pts-mini-val{font-size:28px;font-weight:800;color:#fff;letter-spacing:-1px;line-height:1;}
+.pts-mini-lbl{font-size:11px;color:rgba(255,255,255,.7);font-weight:600;margin-top:2px;}
+.pts-mini-right{text-align:right;}
+.pts-mini-badge{
+  background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);
+  border-radius:8px;padding:4px 10px;
+  font-size:11px;font-weight:700;color:#fff;
+  display:inline-block;margin-bottom:4px;
+}
+.rew-list{padding:0 24px;display:flex;flex-direction:column;gap:12px;}
+.rew-card{
+  background:var(--surface1);border:1px solid var(--border);
+  border-radius:var(--r-lg);overflow:hidden;
+  box-shadow:var(--shadow-sm);
+  display:flex;align-items:stretch;
+  cursor:pointer;transition:box-shadow .15s;
+}
+.rew-card:active{box-shadow:var(--shadow-md);}
+.rew-card.low{border-color:rgba(245,158,11,.3);}
+.rew-card.out{border-color:rgba(220,38,38,.2);opacity:.8;}
+.rew-emoji-wrap{
+  width:70px;display:flex;align-items:center;justify-content:center;
+  font-size:26px;
+  background:var(--surface2);flex-shrink:0;
+}
+.rew-body{flex:1;padding:13px 14px;}
+.rew-name{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;}
+.rew-partner{font-size:11px;color:var(--muted);margin-bottom:8px;}
+.rew-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.rew-pts{font-size:14px;font-weight:800;color:var(--primary);}
+.rew-status{font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:100px;}
+.rew-status.ok{background:rgba(22,163,74,.1);color:var(--primary);}
+.rew-status.low{background:rgba(245,158,11,.1);color:var(--alert);}
+.rew-status.out{background:rgba(220,38,38,.08);color:var(--danger);}
+.rew-action{
+  width:32px;height:32px;border-radius:10px;
+  background:var(--primary);border:none;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;box-shadow:0 2px 8px rgba(22,163,74,.25);flex-shrink:0;
+}
+.rew-action.disabled{background:var(--surface3);box-shadow:none;cursor:not-allowed;}
+.cat-strip{display:flex;gap:8px;padding:0 24px 14px;overflow-x:auto;}
+.cat-strip::-webkit-scrollbar{display:none;}
+.cat-chip{flex-shrink:0;height:28px;padding:0 12px;border-radius:100px;font-size:12px;font-weight:600;color:var(--muted);background:var(--surface1);border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;gap:5px;}
+.cat-chip.on{background:var(--primary-dim);border-color:rgba(22,163,74,.25);color:var(--primary);}
+
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <div class="notch"><div class="notch-cam"></div><div class="notch-light"></div></div>
+  <div class="status">
+    <span>9:41</span>
+    <div class="status-icons">
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><rect x="0" y="3" width="3" height="9" rx="1" fill="#0F172A" opacity=".3"/><rect x="4.5" y="2" width="3" height="10" rx="1" fill="#0F172A" opacity=".5"/><rect x="9" y="0" width="3" height="12" rx="1" fill="#0F172A" opacity=".8"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" fill="#0F172A"/></svg>
+      <svg width="15" height="12" viewBox="0 0 15 12" fill="#0F172A"><path d="M7.5 2.5C9.8 2.5 11.8 3.5 13.2 5L14.5 3.5C12.7 1.8 10.2.8 7.5.8S2.3 1.8.5 3.5L1.8 5C3.2 3.5 5.2 2.5 7.5 2.5Z" opacity=".3"/><path d="M7.5 5C9 5 10.3 5.6 11.3 6.6L12.6 5.1C11.2 3.8 9.4 3 7.5 3S3.8 3.8 2.4 5.1L3.7 6.6C4.7 5.6 6 5 7.5 5Z" opacity=".6"/><path d="M7.5 7.5C8.3 7.5 9 7.8 9.6 8.3L10.9 6.8C9.9 6 8.8 5.5 7.5 5.5S5.1 6 4.1 6.8L5.4 8.3C6 7.8 6.7 7.5 7.5 7.5Z"/><circle cx="7.5" cy="11" r="1.5"/></svg>
+      <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="#0F172A" stroke-opacity=".2"/><rect x="22.5" y="3.5" width="2" height="5" rx="1" fill="#0F172A" opacity=".35"/><rect x="2" y="2" width="15" height="8" rx="2" fill="#16A34A"/></svg>
+    </div>
+  </div>
+
+  <div class="scroll">
+
+    <div class="page-header fade-in">
+      <div>
+        <div class="page-title">Récompenses</div>
+        <div class="page-sub">Échangez vos points INARI</div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);background:var(--surface1);border:1px solid var(--border);padding:5px 10px;border-radius:10px;cursor:pointer">Historique</div>
+    </div>
+
+    <!-- Points mini card -->
+    <div class="pts-mini fade-in-up d1">
+      <div>
+        <div class="pts-mini-val">2 480</div>
+        <div class="pts-mini-lbl">Mes points disponibles</div>
+      </div>
+      <div class="pts-mini-right">
+        <div class="pts-mini-badge">🌿 Éco-Actif</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.65)">147 pts gagnés ce mois</div>
+      </div>
+    </div>
+
+    <!-- Category filter -->
+    <div class="cat-strip fade-in-up d2">
+      <div class="cat-chip on">Tous</div>
+      <div class="cat-chip">🍵 Nourriture</div>
+      <div class="cat-chip">🎁 Cadeaux</div>
+      <div class="cat-chip">🌍 Dons</div>
+      <div class="cat-chip">🎟️ Loisirs</div>
+    </div>
+
+    <!-- Rewards list -->
+    <div class="rew-list fade-in-up d3">
+      <div class="rew-card">
+        <div class="rew-emoji-wrap">☕</div>
+        <div class="rew-body">
+          <div class="rew-name">Café offert — Cafétéria</div>
+          <div class="rew-partner">Biocoop Campus · Stock : 48</div>
+          <div class="rew-foot">
+            <div class="rew-pts">150 pts</div>
+            <div class="rew-status ok">Disponible</div>
+            <button class="rew-action"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><polyline points="22 7 12 7 2 7"/><line x1="12" y1="22" x2="12" y2="7"/><polyline points="7 12 12 7 17 12"/></svg></button>
+          </div>
+        </div>
+      </div>
+      <div class="rew-card">
+        <div class="rew-emoji-wrap">🎟️</div>
+        <div class="rew-body">
+          <div class="rew-name">Ticket cinéma Pathé</div>
+          <div class="rew-partner">Pathé Lyon · Stock : 12</div>
+          <div class="rew-foot">
+            <div class="rew-pts">500 pts</div>
+            <div class="rew-status low">Stock faible</div>
+            <button class="rew-action"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><polyline points="22 7 12 7 2 7"/><line x1="12" y1="22" x2="12" y2="7"/><polyline points="7 12 12 7 17 12"/></svg></button>
+          </div>
+        </div>
+      </div>
+      <div class="rew-card out">
+        <div class="rew-emoji-wrap">🌱</div>
+        <div class="rew-body">
+          <div class="rew-name">Kit zéro déchet</div>
+          <div class="rew-partner">Zero Waste · Rupture de stock</div>
+          <div class="rew-foot">
+            <div class="rew-pts">800 pts</div>
+            <div class="rew-status out">Rupture</div>
+            <button class="rew-action disabled"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted2)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></button>
+          </div>
+        </div>
+      </div>
+      <div class="rew-card">
+        <div class="rew-emoji-wrap">🚲</div>
+        <div class="rew-body">
+          <div class="rew-name">Abonnement vélo 1 mois</div>
+          <div class="rew-partner">Vélo'V Lyon · Stock : 8</div>
+          <div class="rew-foot">
+            <div class="rew-pts">1 200 pts</div>
+            <div class="rew-status ok">Disponible</div>
+            <button class="rew-action"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><polyline points="22 7 12 7 2 7"/><line x1="12" y1="22" x2="12" y2="7"/><polyline points="7 12 12 7 17 12"/></svg></button>
+          </div>
+        </div>
+      </div>
+      <div class="rew-card">
+        <div class="rew-emoji-wrap">🌍</div>
+        <div class="rew-body">
+          <div class="rew-name">Don association WWF</div>
+          <div class="rew-partner">WWF France · Illimité</div>
+          <div class="rew-foot">
+            <div class="rew-pts">200 pts</div>
+            <div class="rew-status ok">Disponible</div>
+            <button class="rew-action"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><polyline points="22 7 12 7 2 7"/><line x1="12" y1="22" x2="12" y2="7"/><polyline points="7 12 12 7 17 12"/></svg></button>
+          </div>
+        </div>
+      </div>
+      <div class="rew-card low">
+        <div class="rew-emoji-wrap">🎧</div>
+        <div class="rew-body">
+          <div class="rew-name">Casque audio Bluetooth</div>
+          <div class="rew-partner">Fnac Lyon · Stock : 3</div>
+          <div class="rew-foot">
+            <div class="rew-pts">2 500 pts</div>
+            <div class="rew-status low">Stock faible</div>
+            <button class="rew-action"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><polyline points="22 7 12 7 2 7"/><line x1="12" y1="22" x2="12" y2="7"/><polyline points="7 12 12 7 17 12"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="height:20px"></div>
+  </div>
+<div class="nav fade-in d5"><a class="nav-item" href="home.html"><div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--muted2)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="nav-label">Accueil</div></a><a class="nav-item" href="carte.html"><div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--muted2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div class="nav-label">Carte</div></a><a class="nav-item active" href="recompenses.html"><div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg></div><div class="nav-label">Récompenses</div></a><a class="nav-item" href="profil.html"><div class="nav-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--muted2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="nav-label">Profil</div></a></div><div class="home-indicator"></div>
+</div>
+
+</body>
+</html>

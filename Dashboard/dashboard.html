@@ -254,7 +254,7 @@ Déconnexion</a>
 <div class="page"><div class="page-inner">
 
 <div class="pg-head">
-  <div><div class="pg-title">Tableau de bord</div><div class="pg-sub">Campus Sciences – Université de Lyon &nbsp;·&nbsp; Mis à jour il y a 2 min</div></div>
+  <div><div class="pg-title">Tableau de bord</div><div class="pg-sub">Campus – Université de Lomé &nbsp;·&nbsp; Mis à jour il y a 2 min</div></div>
   <div class="pg-acts">
     <button class="btn-out"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Exporter</button>
     <button class="btn-out"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.18-3.7L23 15"/></svg> Actualiser</button>
@@ -424,15 +424,15 @@ document.querySelectorAll('.pg-btn').forEach(b=>b.addEventListener('click',funct
   this.classList.add('on');
 }));
 
-const USERS=[
-  {av:'CM',bg:'#16A34A,#0d7a36',name:'Camille Martin',email:'c.martin@univ-lyon.fr',role:'stu',rl:'Étudiante',parts:24,streak:12,points:3480,act:'Il y a 2h',online:true},
-  {av:'LB',bg:'#0EA5A4,#0d7a7a',name:'Lucas Bernard',email:'l.bernard@univ-lyon.fr',role:'agt',rl:'Agent',parts:41,streak:28,points:6240,act:'En ligne',online:true},
-  {av:'SR',bg:'#65a30d,#4d7a0a',name:'Sophie Renard',email:'s.renard@univ-lyon.fr',role:'stu',rl:'Étudiante',parts:18,streak:5,points:2120,act:'Il y a 1 jour',online:false},
-  {av:'AD',bg:'#d97706,#b45309',name:'Ahmed Diallo',email:'a.diallo@univ-lyon.fr',role:'stu',rl:'Étudiant',parts:32,streak:19,points:4750,act:'Il y a 3h',online:true},
-  {av:'ML',bg:'#7c3aed,#5b21b6',name:'Marie Lefebvre',email:'m.lefebvre@univ-lyon.fr',role:'agt',rl:'Agent',parts:56,streak:34,points:8960,act:'En ligne',online:true},
-  {av:'TP',bg:'#0891b2,#0e7490',name:'Thomas Petit',email:'t.petit@univ-lyon.fr',role:'stu',rl:'Étudiant',parts:9,streak:2,points:980,act:'Il y a 5 jours',online:false},
-  {av:'NA',bg:'#be185d,#9d174d',name:'Nadia Aït-Said',email:'n.ait-said@univ-lyon.fr',role:'stu',rl:'Étudiante',parts:15,streak:7,points:1760,act:'Il y a 4h',online:false},
-  {av:'PR',bg:'#0369a1,#075985',name:'Paul Remy',email:'p.remy@univ-lyon.fr',role:'stu',rl:'Étudiant',parts:28,streak:21,points:3980,act:'En ligne',online:true},
+const USERS = [
+  {av:'KA',bg:'#16A34A,#0d7a36',name:'Koffi Afanou',email:'k.afanou@univ.lome.tg',role:'stu',rl:'Étudiant',parts:24,streak:12,points:3480,act:'Il y a 2h',online:true},
+  {av:'AL',bg:'#0EA5A4,#0d7a7a',name:'Abla Lawson',email:'a.lawson@univ.lome.tg',role:'agt',rl:'Agent',parts:41,streak:28,points:6240,act:'En ligne',online:true},
+  {av:'EB',bg:'#65a30d,#4d7a0a',name:'Essonana Batchassi',email:'e.batchassi@univ.lome.tg',role:'stu',rl:'Étudiante',parts:18,streak:5,points:2120,act:'Il y a 1 jour',online:false},
+  {av:'MT',bg:'#d97706,#b45309',name:'Moussa Traoré',email:'m.traore@univ.lome.tg',role:'stu',rl:'Étudiant',parts:32,streak:19,points:4750,act:'Il y a 3h',online:true},
+  {av:'AA',bg:'#7c3aed,#5b21b6',name:'Akouvi Agbodjan',email:'a.agbodjan@univ.lome.tg',role:'agt',rl:'Agent',parts:56,streak:34,points:8960,act:'En ligne',online:true},
+  {av:'FK',bg:'#0891b2,#0e7490',name:'Folly Kouigan',email:'f.kouigan@univ.lome.tg',role:'stu',rl:'Étudiant',parts:9,streak:2,points:980,act:'Il y a 5 jours',online:false},
+  {av:'YA',bg:'#be185d,#9d174d',name:'Yasmine Ayéva',email:'y.ayeva@univ.lome.tg',role:'stu',rl:'Étudiante',parts:15,streak:7,points:1760,act:'Il y a 4h',online:false},
+  {av:'PK',bg:'#0369a1,#075985',name:'Piyabalo Kpazaï',email:'p.kpazai@univ.lome.tg',role:'stu',rl:'Étudiant',parts:28,streak:21,points:3980,act:'En ligne',online:true},
 ];
 function renderUsers(tbodyId){
   const tbody=document.getElementById(tbodyId);

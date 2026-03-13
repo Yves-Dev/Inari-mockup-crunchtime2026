@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>INARI Superviseur – Accueil</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@500&display=swap" rel="stylesheet"/>
+<style>
+
+:root {
+  --bg:         #F7FBF9;
+  --surface1:   #FFFFFF;
+  --surface2:   #F0F7F3;
+  --surface3:   #E8F3ED;
+  --border:     #E6F1EC;
+  --border2:    rgba(22,163,74,.12);
+  --text:       #0F172A;
+  --muted:      #5B6B65;
+  --muted2:     #9BB5A6;
+  --primary:    #16A34A;
+  --primary-dim:rgba(22,163,74,.08);
+  --secondary:  #0EA5A4;
+  --accent:     #2FE680;
+  --alert:      #F59E0B;
+  --danger:     #DC2626;
+  --font:       'DM Sans', sans-serif;
+  --mono:       'DM Mono', monospace;
+  --r:          16px;
+  --r-sm:       10px;
+  --r-lg:       24px;
+  --shadow-sm:  0 1px 4px rgba(15,23,42,.06),0 1px 2px rgba(15,23,42,.04);
+  --shadow-md:  0 4px 16px rgba(15,23,42,.08),0 2px 6px rgba(15,23,42,.04);
+  --shadow-lg:  0 12px 40px rgba(15,23,42,.10);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;height:100%;background:#DDE8E1;}
+body{font-family:var(--font);display:flex;justify-content:center;align-items:center;min-height:100vh;padding:24px;}
+
+/* ── PHONE SHELL ── */
+.phone{
+  width:390px;height:844px;
+  background:var(--bg);
+  border-radius:52px;
+  border:1.5px solid rgba(22,163,74,.2);
+  box-shadow:
+    0 0 0 7px rgba(22,163,74,.06),
+    0 0 60px rgba(22,163,74,.12),
+    0 32px 80px rgba(15,23,42,.20),
+    inset 0 0 40px rgba(255,255,255,.8);
+  overflow:hidden;position:relative;
+  display:flex;flex-direction:column;
+}
+/* Notch */
+.notch{
+  position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:120px;height:34px;background:#0F172A;
+  border-radius:0 0 22px 22px;z-index:30;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.notch-cam{width:10px;height:10px;border-radius:50%;background:#1a2232;}
+.notch-light{width:4px;height:4px;border-radius:50%;background:#2FE680;opacity:.8;animation:blink 3s infinite;}
+@keyframes blink{0%,90%,100%{opacity:.8}92%,98%{opacity:.2}}
+/* Status */
+.status{
+  height:44px;padding:0 28px;
+  display:flex;align-items:flex-end;justify-content:space-between;
+  padding-bottom:8px;
+  font-size:12px;font-weight:700;color:var(--text);
+  position:relative;z-index:10;flex-shrink:0;
+}
+.status-icons{display:flex;align-items:center;gap:5px;}
+/* Scroll */
+.scroll{flex:1;overflow-y:auto;overflow-x:hidden;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;}
+.scroll::-webkit-scrollbar{display:none;}
+/* Bottom nav — 5 items superviseur */
+.nav{
+  height:76px;background:var(--surface1);border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-around;
+  padding:0 8px 10px;flex-shrink:0;
+  box-shadow:0 -4px 20px rgba(15,23,42,.06);
+}
+.nav-item{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  flex:1;padding:8px 0;cursor:pointer;text-decoration:none;
+}
+.nav-icon{width:24px;height:24px;display:flex;align-items:center;justify-content:center;position:relative;}
+.nav-label{font-size:9.5px;font-weight:600;color:var(--muted2);text-align:center;}
+.nav-item.active .nav-label{color:var(--primary);}
+/* Scanner nav button (elevated) */
+.nav-scanner-btn{
+  width:48px;height:48px;margin-top:-16px;
+  background:linear-gradient(135deg,var(--primary),#0d9050);
+  border-radius:16px;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 16px rgba(22,163,74,.35),0 0 0 3px var(--surface1),0 0 0 4px var(--border2);
+  cursor:pointer;
+}
+.home-indicator{
+  height:4px;width:120px;background:rgba(15,23,42,.1);
+  border-radius:2px;
+  position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+}
+/* Shared */
+.sec-head{padding:0 24px 12px;display:flex;align-items:center;justify-content:space-between;}
+.sec-title{font-size:16px;font-weight:700;color:var(--text);}
+.sec-link{font-size:13px;font-weight:600;color:var(--primary);}
+.page-header{padding:16px 24px 14px;display:flex;align-items:center;justify-content:space-between;}
+.page-title{font-size:22px;font-weight:800;color:var(--text);letter-spacing:-.4px;}
+.page-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+/* Chip pills */
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px;}
+.chip.present{background:rgba(22,163,74,.1);color:var(--primary);}
+.chip.attente{background:rgba(245,158,11,.1);color:var(--alert);}
+.chip.valide{background:rgba(14,165,164,.1);color:var(--secondary);}
+.chip.refuse{background:rgba(220,38,38,.08);color:var(--danger);}
+.chip.synchro{background:rgba(22,163,74,.1);color:var(--primary);}
+.chip.offline{background:rgba(245,158,11,.12);color:#b45309;}
+/* Animations */
+.fade-in{animation:fadeIn .35s ease both;}
+.fade-in-up{animation:fadeInUp .45s ease both;}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.d1{animation-delay:.04s}.d2{animation-delay:.09s}.d3{animation-delay:.14s}
+.d4{animation-delay:.19s}.d5{animation-delay:.24s}.d6{animation-delay:.29s}
+
+
+/* Header supervisor */
+.sup-header{
+  padding:16px 24px 18px;
+  background:linear-gradient(180deg,rgba(22,163,74,.06) 0%,transparent 100%);
+  position:relative;
+}
+.sup-header::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(22,163,74,.3),transparent);}
+.sup-header-row{display:flex;align-items:center;justify-content:space-between;}
+.sup-greeting{font-size:12px;color:var(--muted);font-weight:500;margin-bottom:3px;letter-spacing:.02em;}
+.sup-name{font-size:22px;font-weight:800;color:var(--text);letter-spacing:-.4px;}
+.sup-badge{display:inline-flex;align-items:center;gap:5px;margin-top:6px;background:linear-gradient(135deg,rgba(14,165,164,.1),rgba(14,165,164,.06));border:1px solid rgba(14,165,164,.2);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;color:var(--secondary);}
+.sup-av{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,var(--secondary),#0d7a7a);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:#fff;box-shadow:0 4px 14px rgba(14,165,164,.3);flex-shrink:0;}
+
+/* Logo strip */
+.logo-strip{margin:0 24px 18px;background:var(--surface1);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px 18px;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow-sm);position:relative;overflow:hidden;}
+.logo-strip::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--primary),var(--accent),var(--secondary));}
+.logo-strip-icon{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#ECFDF5,#D1FAE5);border:1px solid rgba(22,163,74,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.logo-strip-name{font-size:18px;font-weight:800;color:var(--primary);letter-spacing:-.3px;line-height:1;margin-bottom:2px;}
+.logo-strip-sub{font-size:10.5px;color:var(--muted);}
+.logo-strip-role{margin-left:auto;text-align:right;flex-shrink:0;}
+.logo-strip-role-badge{font-size:10px;font-weight:700;color:var(--secondary);background:rgba(14,165,164,.08);border:1px solid rgba(14,165,164,.2);border-radius:7px;padding:3px 8px;display:block;margin-bottom:3px;}
+.logo-strip-role-sub{font-size:9.5px;color:var(--muted2);}
+
+/* Sync banner */
+.sync-banner{margin:0 24px 16px;background:var(--surface1);border:1px solid var(--border);border-radius:var(--r);padding:11px 16px;display:flex;align-items:center;gap:10px;box-shadow:var(--shadow-sm);}
+.sync-dot{width:8px;height:8px;border-radius:50%;background:var(--primary);box-shadow:0 0 8px rgba(22,163,74,.5);flex-shrink:0;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.sync-text{flex:1;font-size:12px;font-weight:600;color:var(--text);}
+.sync-sub{font-size:10.5px;color:var(--muted);margin-top:1px;}
+.sync-time{font-size:10.5px;font-weight:700;color:var(--primary);font-family:var(--mono);}
+
+/* Event card (today's) */
+.today-card{
+  margin:0 24px 18px;
+  background:linear-gradient(135deg,var(--primary) 0%,#0d8a3f 60%,#0e7a8a 100%);
+  border-radius:var(--r-lg);padding:20px 22px;position:relative;overflow:hidden;
+  box-shadow:0 8px 28px rgba(22,163,74,.28);cursor:pointer;
+}
+.today-card::before{content:'';position:absolute;top:-60px;right:-40px;width:160px;height:160px;background:radial-gradient(circle,rgba(255,255,255,.12) 0%,transparent 65%);}
+.today-card::after{content:'';position:absolute;bottom:-50px;left:-20px;width:140px;height:140px;background:radial-gradient(circle,rgba(47,230,128,.18) 0%,transparent 70%);}
+.today-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.65);margin-bottom:6px;position:relative;z-index:1;}
+.today-name{font-size:18px;font-weight:800;color:#fff;letter-spacing:-.3px;line-height:1.2;margin-bottom:10px;position:relative;z-index:1;}
+.today-meta{display:flex;flex-direction:column;gap:5px;margin-bottom:14px;position:relative;z-index:1;}
+.today-row{display:flex;align-items:center;gap:7px;font-size:12px;color:rgba(255,255,255,.8);}
+.today-progress{position:relative;z-index:1;}
+.today-prog-label{display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.65);margin-bottom:6px;}
+.today-prog-bg{height:6px;background:rgba(255,255,255,.15);border-radius:100px;overflow:hidden;}
+.today-prog-fill{height:100%;width:68%;background:rgba(255,255,255,.85);border-radius:100px;animation:barFill .9s ease forwards;}
+@keyframes barFill{from{width:0}}
+.today-actions{display:flex;gap:9px;margin-top:14px;position:relative;z-index:1;}
+.today-btn{flex:1;height:36px;border-radius:11px;font-family:var(--font);font-size:12px;font-weight:700;cursor:pointer;border:none;display:flex;align-items:center;justify-content:center;gap:6px;text-decoration:none;}
+.today-btn.primary{background:rgba(255,255,255,.95);color:var(--primary);}
+.today-btn.outline{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;backdrop-filter:blur(4px);}
+
+/* Stats grid */
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;padding:0 24px;margin-bottom:18px;}
+.stat-card{background:var(--surface1);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px 16px;box-shadow:var(--shadow-sm);position:relative;overflow:hidden;}
+.stat-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2.5px;}
+.stat-card.c-g::after{background:linear-gradient(90deg,var(--primary),var(--accent));}
+.stat-card.c-t::after{background:linear-gradient(90deg,var(--secondary),#06b6d4);}
+.stat-card.c-a::after{background:linear-gradient(90deg,var(--alert),#fb923c);}
+.stat-card.c-p::after{background:linear-gradient(90deg,#7c3aed,#a855f7);}
+.stat-ico{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:8px;}
+.stat-ico.g{background:var(--primary-dim);color:var(--primary);}
+.stat-ico.t{background:rgba(14,165,164,.1);color:var(--secondary);}
+.stat-ico.a{background:rgba(245,158,11,.1);color:var(--alert);}
+.stat-ico.p{background:rgba(124,58,237,.08);color:#7c3aed;}
+.stat-val{font-size:22px;font-weight:800;letter-spacing:-.6px;line-height:1;margin-bottom:2px;}
+.stat-lbl{font-size:10.5px;color:var(--muted);}
+.stat-delta{font-size:10px;font-weight:600;margin-top:5px;}
+
+/* Events list mini */
+.ev-mini-list{padding:0 24px;display:flex;flex-direction:column;gap:9px;}
+.ev-mini{background:var(--surface1);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;display:flex;align-items:center;gap:11px;box-shadow:var(--shadow-sm);cursor:pointer;text-decoration:none;}
+.ev-mini-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.ev-mini-info{flex:1;min-width:0;}
+.ev-mini-name{font-size:13px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ev-mini-meta{font-size:11px;color:var(--muted);margin-top:2px;}
+.ev-mini-arrow{color:var(--muted2);}
+
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="notch"><div class="notch-cam"></div><div class="notch-light"></div></div>
+  <div class="status">
+    <span>9:41</span>
+    <div class="status-icons">
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><rect x="0" y="3" width="3" height="9" rx="1" fill="#0F172A" opacity=".3"/><rect x="4.5" y="2" width="3" height="10" rx="1" fill="#0F172A" opacity=".5"/><rect x="9" y="0" width="3" height="12" rx="1" fill="#0F172A" opacity=".8"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" fill="#0F172A"/></svg>
+      <svg width="15" height="12" viewBox="0 0 15 12" fill="#0F172A"><path d="M7.5 2.5C9.8 2.5 11.8 3.5 13.2 5L14.5 3.5C12.7 1.8 10.2.8 7.5.8S2.3 1.8.5 3.5L1.8 5C3.2 3.5 5.2 2.5 7.5 2.5Z" opacity=".3"/><path d="M7.5 5C9 5 10.3 5.6 11.3 6.6L12.6 5.1C11.2 3.8 9.4 3 7.5 3S3.8 3.8 2.4 5.1L3.7 6.6C4.7 5.6 6 5 7.5 5Z" opacity=".6"/><path d="M7.5 7.5C8.3 7.5 9 7.8 9.6 8.3L10.9 6.8C9.9 6 8.8 5.5 7.5 5.5S5.1 6 4.1 6.8L5.4 8.3C6 7.8 6.7 7.5 7.5 7.5Z"/><circle cx="7.5" cy="11" r="1.5"/></svg>
+      <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="#0F172A" stroke-opacity=".2"/><rect x="22.5" y="3.5" width="2" height="5" rx="1" fill="#0F172A" opacity=".35"/><rect x="2" y="2" width="15" height="8" rx="2" fill="#16A34A"/></svg>
+    </div>
+  </div>
+  <div class="scroll">
+
+    <!-- Header -->
+    <div class="sup-header fade-in">
+      <div class="sup-header-row">
+        <div>
+          <div class="sup-greeting">Bonjour 👋</div>
+          <div class="sup-name">Lucas Bernard</div>
+          <div class="sup-badge">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Agent superviseur
+          </div>
+        </div>
+        <div class="sup-av">LB</div>
+      </div>
+    </div>
+
+    <!-- Logo strip -->
+    <div class="logo-strip fade-in-up d1">
+      <div class="logo-strip-icon">
+        <svg width="24" height="24" viewBox="0 0 30 30" fill="none">
+          <path d="M15 3C10.6 3 8 6.5 8 11c0 3.6 2.2 6.6 5.6 7.8.3-3 1.6-6 5.2-8-2.3 3.2-2.7 6.5-2.5 8-.3 0-.5 0-.8 0 4.6 0 7-3.5 7-8C22.5 6.3 19.2 3 15 3Z" fill="#16A34A"/>
+          <path d="M10.5 24L12 26l1.5-2M19.5 24L18 26l-1.5-2M12 26h6" stroke="#0EA5A4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div>
+        <div class="logo-strip-name">INARI</div>
+        <div class="logo-strip-sub">Interface Superviseur</div>
+      </div>
+      <div class="logo-strip-role">
+        <span class="logo-strip-role-badge">🟢 En service</span>
+        <div class="logo-strip-role-sub">Campus Sciences</div>
+      </div>
+    </div>
+
+    <!-- Sync banner -->
+    <div class="sync-banner fade-in-up d2">
+      <div class="sync-dot"></div>
+      <div>
+        <div class="sync-text">Synchronisé</div>
+        <div class="sync-sub">Dernière synchro il y a 2 min</div>
+      </div>
+      <div class="sync-time">09:39</div>
+    </div>
+
+    <!-- Today's event card -->
+    <div class="today-card fade-in-up d2">
+      <div class="today-label">📍 Événement en cours</div>
+      <div class="today-name">Collecte Plastique — BU Nord</div>
+      <div class="today-meta">
+        <div class="today-row">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Aujourd'hui · 10h00 – 13h00
+        </div>
+        <div class="today-row">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Amphi A · Bât. Sciences
+        </div>
+      </div>
+      <div class="today-progress">
+        <div class="today-prog-label">
+          <span>Participants validés</span>
+          <span style="font-family:var(--mono)">34 / 50</span>
+        </div>
+        <div class="today-prog-bg"><div class="today-prog-fill"></div></div>
+      </div>
+      <div class="today-actions">
+        <a class="today-btn primary" href="sup-scanner.html">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 7 23 1 17 1"/><polyline points="1 17 1 23 7 23"/><polyline points="23 17 23 23 17 23"/><polyline points="1 7 1 1 7 1"/></svg>
+          Scanner QR
+        </a>
+        <a class="today-btn outline" href="sup-participants.html">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+          Participants
+        </a>
+      </div>
+    </div>
+
+    <!-- Stats grid -->
+    <div class="sec-head fade-in-up d3">
+      <span class="sec-title">Statistiques du jour</span>
+    </div>
+    <div class="stats-grid fade-in-up d3">
+      <div class="stat-card c-g">
+        <div class="stat-ico g"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+        <div class="stat-val" style="color:var(--primary)">34</div>
+        <div class="stat-lbl">Participants validés</div>
+        <div class="stat-delta" style="color:var(--primary)">↑ +8 depuis 1h</div>
+      </div>
+      <div class="stat-card c-t">
+        <div class="stat-ico t"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <div class="stat-val" style="color:var(--secondary)">124 kg</div>
+        <div class="stat-lbl">Poids collecté</div>
+        <div class="stat-delta" style="color:var(--secondary)">↑ +34 kg / heure</div>
+      </div>
+      <div class="stat-card c-a">
+        <div class="stat-ico a"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+        <div class="stat-val" style="color:var(--alert)">12</div>
+        <div class="stat-lbl">Sacs récupérés</div>
+        <div class="stat-delta" style="color:var(--alert)">Objectif : 20 sacs</div>
+      </div>
+      <div class="stat-card c-p">
+        <div class="stat-ico p"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg></div>
+        <div class="stat-val" style="color:#7c3aed">4 080</div>
+        <div class="stat-lbl">Points attribués</div>
+        <div class="stat-delta" style="color:#7c3aed">120 pts / participant</div>
+      </div>
+    </div>
+
+    <!-- Other events -->
+    <div class="sec-head fade-in-up d4">
+      <span class="sec-title">Mes événements</span>
+      <a class="sec-link" href="sup-evenement.html">Voir tout →</a>
+    </div>
+    <div class="ev-mini-list fade-in-up d4">
+      <a class="ev-mini" href="sup-evenement.html">
+        <div class="ev-mini-dot" style="background:var(--alert)"></div>
+        <div class="ev-mini-info">
+          <div class="ev-mini-name">Compostage Collectif — Jardin</div>
+          <div class="ev-mini-meta">Jeu 13/06 · 14h–16h · 43/45 inscrits</div>
+        </div>
+        <span class="chip attente" style="font-size:10px">Programmé</span>
+        <svg class="ev-mini-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </a>
+      <a class="ev-mini" href="sup-evenement.html">
+        <div class="ev-mini-dot" style="background:var(--muted2)"></div>
+        <div class="ev-mini-info">
+          <div class="ev-mini-name">Grand Tri — Amphi B</div>
+          <div class="ev-mini-meta">Lun 10/06 · 14h–18h · Terminé ✓</div>
+        </div>
+        <span class="chip valide" style="font-size:10px">Terminé</span>
+        <svg class="ev-mini-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </a>
+    </div>
+
+    <div style="height:20px"></div>
+  </div>
+<div class="nav fade-in d6"><a class="nav-item active" href="sup-accueil.html"><div class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><div class="nav-label">Accueil</div></a><a class="nav-item" href="sup-evenement.html"><div class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--muted2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg></div><div class="nav-label">Événement</div></a><a class="nav-item" href="sup-scanner.html" style="text-decoration:none"><div class="nav-scanner-btn"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 7 23 1 17 1"/><polyline points="1 17 1 23 7 23"/><polyline points="23 17 23 23 17 23"/><polyline points="1 7 1 1 7 1"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="12" y1="8" x2="12" y2="16"/></svg></div><div class="nav-label" style="color:var(--muted2);">Scanner</div></a><a class="nav-item" href="sup-participants.html"><div class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--muted2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="nav-label">Participants</div></a><a class="nav-item" href="sup-profil.html"><div class="nav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--muted2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div class="nav-label">Mon profil</div></a></div><div class="home-indicator"></div>
+</div>
+
+</body>
+</html>
